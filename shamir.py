@@ -39,10 +39,9 @@ def coeff(t,secret):
       
     return coeff 
    
-def generateShares(n,m,secret): 
-      
+def generateShares(n,m,secret):       
     # Split secret using SSS into 
-    # n shares with threshold m 
+    # n shares with threshold m
     cfs = coeff(m,secret) 
     shares = [] 
       
@@ -51,6 +50,18 @@ def generateShares(n,m,secret):
         shares.append([r, polynom(r,cfs)]) 
       
     return shares
+
+
+"""
+
+part - 2:
+
+-> collect the shares which shuld not exceed threshold.
+-> make an Lagranges interpolation algo. for polynomial reconstruction.
+-> determine the value for P(0), 
+-> the value reveled or the constant term in the polyomial is the our SECRET.
+
+"""
 
 def reconstructSecret(shares): 
       
@@ -74,21 +85,22 @@ def reconstructSecret(shares):
     return int(round(Decimal(sums),0))
   
   
-# Driver code  
+  
 if __name__ == '__main__': 
       
-    # (3,5) sharing scheme 
-    t,n = 3, 5
-    secret = 6789
-    print('Original Secret:', secret) 
+    # input the threshold and shares
+    n = int(input('threshold :'))
+    t = int(input('Shares :'))    
+    secret = int(input('secret :')) # input the secret 
+    print('\nOriginal Secret:', secret) 
    
-    # Phase I: Generation of shares 
+
+    # generate the random shares 
     shares = generateShares(n, t, secret) 
     print('\nShares:', *shares) 
    
-    # Phase II: Secret Reconstruction 
-    # Picking t shares randomly for 
-    # reconstruction 
+
+    # sample shares considered
     pool = random.sample(shares, t) 
     print('\nCombining shares:', *pool) 
-    print("Reconstructed secret:", reconstructSecret(pool)) 
+    print("Reconstructed secret:", reconstructSecret(pool)) # secret revealed!!
